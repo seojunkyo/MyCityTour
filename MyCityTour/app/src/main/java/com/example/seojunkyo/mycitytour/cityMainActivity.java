@@ -1,31 +1,28 @@
 package com.example.seojunkyo.mycitytour;
 
 import android.app.Activity;
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.view.*;
-import android.app.Fragment;
-
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.support.v4.app.Fragment;
+import android.widget.Button;
 
 
 /**
  * Created by seojunkyo on 2015. 3. 17..
  */
-public class cityMainActivity extends Activity{
+public class cityMainActivity extends FragmentActivity{
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.city_main);
+
     }
 
-    public void onClicked(int id) {
-        cityBottomFragment tailFragment = (cityBottomFragment)getFragmentManager().findFragmentById(R.id.tail_fragment);
-        switch(id){
-            case R.id.map_click:
-                break;
-            case R.id.info_click:
-                break;
-        }
-    }
 }
