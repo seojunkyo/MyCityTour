@@ -1,15 +1,13 @@
 package com.example.seojunkyo.mycitytour;
 
-import android.app.Activity;
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -17,27 +15,28 @@ import android.widget.Toast;
 /**
  * Created by seojunkyo on 2015. 3. 18..
  */
-public class cityInfoFragment  extends Fragment implements OnClickListener {
+public class cityInfoFragment  extends Fragment{
+
+    View view;
+    WebView infoWeb;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.city_info, container, false);
+        View view = inflater.inflate(R.layout.city_info, container, false);
 
-        Button button = (Button) v.findViewById(R.id.info_click);
-        button.setOnClickListener(this);
-
-        return v;
+        if ("http://m.daum.net" != null) {
+            infoWeb = (WebView) view.findViewById(R.id.fragment_web);
+            infoWeb.getSettings().setJavaScriptEnabled(true);
+            infoWeb.setWebViewClient(new webClient());
+            infoWeb.loadUrl("http://m.daum.net");
+        }
+        return view;
     }
 
-    public void onClick(View v) {
-
-        switch (v.getId()) {
-
-            case R.id.info_click:
-                Toast.makeText(getActivity(), "TwoFragment", Toast.LENGTH_SHORT)
-                        .show();
-                break;
-
+    private class webClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            return false;
         }
-
     }
 }

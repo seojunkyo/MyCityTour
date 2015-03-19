@@ -52,7 +52,6 @@
         android:layout_height="match_parent"
         android:layout_weight="4"
         android:layout_marginTop="10dp"
-        tools:layout="@layout/city_map"
         class="com.example.seojunkyo.mycitytour.cityMapFragment"/>
 
 
