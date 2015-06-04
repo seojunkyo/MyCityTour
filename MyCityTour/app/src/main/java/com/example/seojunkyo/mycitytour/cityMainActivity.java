@@ -1,11 +1,20 @@
 package com.example.seojunkyo.mycitytour;
 
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -16,42 +25,71 @@ import com.google.android.gms.maps.model.MarkerOptions;
 /**
  * Created by seojunkyo on 2015. 3. 17..
  */
-public class cityMainActivity extends FragmentActivity{
+public class cityMainActivity extends FragmentActivity implements View.OnClickListener{
 
-    GoogleMap mGoogleMap;
+    final String TAG = "MainActivity";
 
-    LatLng loc = new LatLng(37.5306, 126.9653); // 위치 좌표 설정
-    CameraPosition cp= new CameraPosition.Builder().target((loc)).zoom(16).build();
-    MarkerOptions marker = new MarkerOptions().position(loc);
+    int mCurrentFragmentIndex;
+    public final static int FRAGMENT_ONE = 0;
+    public final static int FRAGMENT_TWO = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.city_main);
 
-        mGoogleMap = ((SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_map)).getMap();
-// 화면에 구글맵 표시
-        mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cp)); // 지정위치로 이동
-        mGoogleMap.addMarker(marker); // 지정위치에 마커 추가
+        Button bt_oneFragment = (Button) findViewById(R.id.map_click);
+        bt_oneFragment.setOnClickListener(this);
+        Button bt_twoFragment = (Button) findViewById(R.id.info_click);
+        bt_twoFragment.setOnClickListener(this);
+
+        mCurrentFragmentIndex = FRAGMENT_ONE;
+
+        fragmentReplace(mCurrentFragmentIndex);
     }
 
-    public void onClick(View view) {
-        Fragment info_fr=new cityInfoFragment();
-        FragmentTransaction info_ft = getFragmentManager().beginTransaction();
+    public void fragmentReplace(int reqNewFragmentIndex) {
 
-        Fragment map_fr = new cityMapFragment();
-        FragmentTransaction map_ft = getFragmentManager().beginTransaction();
+        Fragment newFragment = null;
+        Log.d(TAG, "fragmentReplace " + reqNewFragmentIndex);
+        newFragment = getFragment(reqNewFragmentIndex);
 
+        // replace fragment
+        final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.tail_fragment, newFragment);
 
-        if (view == findViewById(R.id.info_click)) {
-            info_ft.add(R.id.tail_fragment, info_fr);
-            info_ft.addToBackStack(null);
-            info_ft.commit();
+        // Commit the transaction
+        transaction.commit();
 
-        } else if(view == findViewById(R.id.map_click)) {
-            map_ft.add(R.id.tail_fragment, map_fr);
-            info_ft.addToBackStack(null);
-            map_ft.commit();
+    }
+    private Fragment getFragment(int idx) {
+        Fragment newFragment = null;
+
+        switch (idx) {
+            case FRAGMENT_ONE:
+                newFragment = new cityMapFragment();
+                break;
+            case FRAGMENT_TWO:
+                newFragment = new cityInfoFragment();
+                break;
+            default:
+                Log.d(TAG, "Unhandle case");
+                break;
+        }
+        return newFragment;
+    }
+
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+            case R.id.map_click:
+                mCurrentFragmentIndex = FRAGMENT_ONE;
+                fragmentReplace(mCurrentFragmentIndex);
+                break;
+            case R.id.info_click:
+                mCurrentFragmentIndex = FRAGMENT_TWO;
+                fragmentReplace(mCurrentFragmentIndex);
+                break;
         }
     }
 }

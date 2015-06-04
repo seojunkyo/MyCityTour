@@ -46,13 +46,11 @@
     </LinearLayout>
 
     <!-- 하단에 표시할 프레그먼 -->
-    <fragment
+    <FrameLayout
         android:id="@+id/tail_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="4"
-        android:layout_marginTop="10dp"
-        class="com.example.seojunkyo.mycitytour.cityMapFragment"/>
-
+        android:layout_marginTop="10dp"/>
 
 </LinearLayout>
